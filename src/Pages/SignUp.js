@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './../contexts/AuthProvider';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const SignUp = () => {
-    const { createUser, updateUserInfo, googleSignIn } = useContext(AuthContext);
+    const { createUser, updateUser, googleSignIn } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -13,20 +14,35 @@ const SignUp = () => {
         event.preventDefault();
         const form = event.target;
         const name = form.name.value;
-        const photoURL = form.photoURL.value;
+        const image = form.image.files[0];
         const email = form.email.value;
         const password = form.password.value;
-        console.log(name, photoURL, email, password);
-        createUser(email, password)
-            .then((result) => {
-                console.log(result.user);
-                updateUserInfo(name, photoURL)
-                    .then(() => {
-                        navigate(from, { replace: true });
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const url = "https://api.imgbb.com/1/upload?key=b061ec1a58988f7f375c0629ea0844cd";
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(imageData => {
+                createUser(email, password)
+                    .then(result => {
+                        updateUser(name, imageData.data.display_url)
+                            .then(() => {
+                                toast.success('Check your email for verification purpose');
+                                navigate(from, { replace: true });
+                            })
+                            .catch(err => console.log(err))
                     })
-                    .catch((error) => { console.error(error) })
+                    .catch(err => {
+                        console.log(err)
+                    })
             })
-            .catch((error) => { console.error(error) })
+            .catch(err => console.log(err))
+
     }
 
     const handleGoogleSignIn = () => {
@@ -63,6 +79,18 @@ const SignUp = () => {
                                 placeholder='Enter Your Full Name'
                                 className='w-full px-3 py-2 border rounded-md border-gray-300'
                                 data-temp-mail-org='0'
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor='image' className='mb-2 text-sm'>
+                                Select Image:
+                            </label>
+                            <input
+                                type='file'
+                                id='image'
+                                name='image'
+                                accept='image/*'
                                 required
                             />
                         </div>
