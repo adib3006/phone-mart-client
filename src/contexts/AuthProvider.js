@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import app from './../firebase/firebase.config';
-import {getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged} from 'firebase/auth'
+import {getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged, sendPasswordResetEmail} from 'firebase/auth';
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -32,8 +32,12 @@ const AuthProvider = ({children}) => {
         return signInWithPopup(auth, googleProvider);
     }
 
+    const passwordReset = (email) => {
+        setLoading(true);
+        return sendPasswordResetEmail(auth,email);
+    }
+
     const logOut = () => {
-        localStorage.removeItem('cookBook-token');
         setLoading(true);
         return signOut(auth);
     }
@@ -49,7 +53,7 @@ const AuthProvider = ({children}) => {
         }
     },[])
 
-    const authInfo = {user, loading, createUser, signIn, logOut, updateUser, googleSignIn};
+    const authInfo = {user, loading, createUser, signIn, logOut, updateUser, googleSignIn, passwordReset};
     return (
         <AuthContext.Provider value={authInfo}>
             {

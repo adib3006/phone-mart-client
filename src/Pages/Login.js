@@ -1,29 +1,53 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from './../contexts/AuthProvider';
 
 const Login = () => {
+    const { signIn, googleSignIn, passwordReset } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
     const [error, setError] = useState('');
     const [userEmail, setUserEmail] = useState('');
+    const from = location.state?.from?.pathname || '/';
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
+        const role = form.role.value;
         const password = form.password.value;
-        console.log(email, password);
+        console.log(email, role, password);
+        signIn(email, password)
+            .then((result) => {
+                navigate(from, { replace: true });
+                setError('');
+                form.reset();
+            })
+            .catch((error) => { setError(error.message) })
+
     }
 
-    const handlePasswordReset = () =>{
-
+    const handlePasswordReset = () => {
+        passwordReset(userEmail)
+            .then((result) => {
+                toast.info('Reset Password link sent to your email')
+            })
+            .catch((error) => console.error(error))
     }
 
     const handleGoogleSignIn = () => {
-
+        googleSignIn()
+            .then((result) => {
+                navigate(from, { replace: true });
+                setError('');
+            })
+            .catch((error) => { setError(error.message) })
     }
 
     return (
-        <div className='flex justify-center items-center pt-8'>
-            <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
+        <div className='flex justify-center items-center pt-8 my-10'>
+            <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 border shadow-lg'>
                 <div className='mb-8 text-center'>
                     <h1 className='my-3 text-4xl font-bold'>Log in</h1>
                     <p className='text-sm text-gray-400'>
@@ -42,15 +66,24 @@ const Login = () => {
                                 Email address
                             </label>
                             <input
-                                onBlur={(e)=>{setUserEmail(e.target.value)}}
+                                onBlur={(e) => { setUserEmail(e.target.value) }}
                                 type='email'
                                 name='email'
                                 id='email'
                                 placeholder='Enter Your Email Here'
-                                className='w-full px-3 py-2 border rounded-md border-gray-300 focus:border-gray-900 bg-gray-200 text-gray-900'
+                                className='w-full px-3 py-2 border rounded-md border-gray-300'
                                 data-temp-mail-org='0'
                                 required
                             />
+                        </div>
+                        <div className='w-full'>
+                            <label htmlFor='role' className='text-sm mb-2'>
+                                Choose your role
+                            </label>
+                            <select name='role' className="select select-bordered w-full">
+                                <option value='buyer'>Buyer</option>
+                                <option value='seller'>Seller</option>
+                            </select>
                         </div>
                         <div>
                             <div className='flex justify-between'>
@@ -63,7 +96,7 @@ const Login = () => {
                                 name='password'
                                 id='password'
                                 placeholder='*******'
-                                className='w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-200 focus:border-gray-900 text-gray-900'
+                                className='w-full px-3 py-2 border rounded-md border-gray-300'
                             />
                         </div>
                     </div>
