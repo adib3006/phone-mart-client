@@ -16,6 +16,7 @@ const SignUp = () => {
         const name = form.name.value;
         const image = form.image.files[0];
         const email = form.email.value;
+        const role = form.role.value;
         const password = form.password.value;
         const formData = new FormData();
         formData.append('image', image);
@@ -32,7 +33,31 @@ const SignUp = () => {
                     .then(result => {
                         updateUser(name, imageData.data.display_url)
                             .then(() => {
-                                toast.success('Check your email for verification purpose');
+                                const user = {
+                                    userName: name,
+                                    email,
+                                    photoURL: imageData.data.display_url,
+                                    role
+                                }
+                                console.log(user);
+
+                                fetch('http://localhost:5000/users', {
+                                    method: 'POST',
+                                    headers: {
+                                        'content-type': 'application/json'
+                                    },
+                                    body: JSON.stringify(user)
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.acknowledged) {
+                                            form.reset();
+                                            toast.success('user added successfully');
+                                        }
+                                    })
+                                    .catch(err => console.error(err))
+
+                                toast.success('User created successfully');
                                 navigate(from, { replace: true });
                             })
                             .catch(err => console.log(err))
@@ -48,6 +73,7 @@ const SignUp = () => {
     const handleGoogleSignIn = () => {
         googleSignIn()
             .then((result) => {
+                console.log(result);
                 navigate(from, { replace: true });
             })
             .catch((error) => { console.error(error) })
@@ -107,6 +133,15 @@ const SignUp = () => {
                                 data-temp-mail-org='0'
                                 required
                             />
+                        </div>
+                        <div className='w-full'>
+                            <label htmlFor='role' className='text-sm mb-2'>
+                                Choose your role
+                            </label>
+                            <select name='role' className="select select-bordered w-full">
+                                <option value='buyer'>Buyer</option>
+                                <option value='seller'>Seller</option>
+                            </select>
                         </div>
                         <div>
                             <div className='flex justify-between'>

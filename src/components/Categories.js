@@ -12,7 +12,7 @@ const Categories = () => {
             return data;
         }
     })
-    console.log(categories);
+    //console.log(categories);
     return (
         <div className='mb-10'>
             <h1 className="text-5xl font-bold text-center mt-20 mb-10">Categories</h1>

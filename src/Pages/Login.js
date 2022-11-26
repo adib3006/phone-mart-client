@@ -15,9 +15,8 @@ const Login = () => {
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
-        const role = form.role.value;
         const password = form.password.value;
-        console.log(email, role, password);
+        console.log(email, password);
         signIn(email, password)
             .then((result) => {
                 navigate(from, { replace: true });
@@ -75,15 +74,6 @@ const Login = () => {
                                 data-temp-mail-org='0'
                                 required
                             />
-                        </div>
-                        <div className='w-full'>
-                            <label htmlFor='role' className='text-sm mb-2'>
-                                Choose your role
-                            </label>
-                            <select name='role' className="select select-bordered w-full">
-                                <option value='buyer'>Buyer</option>
-                                <option value='seller'>Seller</option>
-                            </select>
                         </div>
                         <div>
                             <div className='flex justify-between'>

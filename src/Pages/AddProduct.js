@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { AuthContext } from './../contexts/AuthProvider';
+import { toast } from 'react-hot-toast';
 
 const AddProduct = () => {
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const handleSubmit = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -16,38 +17,68 @@ const AddProduct = () => {
         const description = form.description.value;
         const location = form.location.value;
         const yearsOfUse = form.yearsOfUse.value;
-        const postDate = new Date();
+        // const postDate = new Date();
         const report = false;
         const advertise = false;
         const sold = false;
-        const phone = {
-            name,
-            image,
-            resellPrice,
-            condition,
-            categoryId,
-            phoneNumber,
-            originalPrice,
-            description,
-            location,
-            yearsOfUse,
-            postDate,
-            report,
-            advertise,
-            sold,
-            sellerName:user.displayName,
-            sellerEmail:user.email
-        }
-        console.log(phone);
 
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const url = "https://api.imgbb.com/1/upload?key=b061ec1a58988f7f375c0629ea0844cd";
+
+        fetch(url, {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(imageData => {
+                const phone = {
+                    name,
+                    image: imageData.data.display_url,
+                    resellPrice,
+                    condition,
+                    categoryId,
+                    phoneNumber,
+                    originalPrice,
+                    description,
+                    location,
+                    yearsOfUse,
+                    // postDate,
+                    report,
+                    advertise,
+                    sold,
+                    sellerName: user.displayName,
+                    sellerEmail: user.email
+                }
+                console.log(phone);
+
+                fetch('http://localhost:5000/dashboard/add-product', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(phone)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.acknowledged) {
+                            form.reset();
+                            toast.success('Phone added successfully');
+                        }
+                    })
+                    .catch(err => console.error(err))
+            })
+            .catch(err => console.log(err))
     }
+
     return (
         <div className='flex items-center justify-center'>
             <div className='w-1/2'>
                 <h1 className="text-5xl text-center my-5">Add a Product</h1>
                 <form onSubmit={handleSubmit} className='grid grid-cols-1 gap-3'>
                     <input name='name' placeholder='Product Name' type="text" className="input w-full input-bordered" />
-                    <input type='file' id='image' name='image' accept='image/*'/>
+                    <input type='file' id='image' name='image' accept='image/*' />
                     <input name='resellPrice' placeholder='price' type="text" className="input w-full input-bordered" />
                     <select name='condition' className='select select-bordered w-full'>
                         <option value="good">Good</option>
