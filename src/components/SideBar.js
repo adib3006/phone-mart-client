@@ -2,11 +2,24 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import { AuthContext } from './../contexts/AuthProvider';
+import { useQuery } from '@tanstack/react-query';
 
 const SideBar = () => {
     const { user, logOut } = useContext(AuthContext);
     const navigate = useNavigate();
     const [isActive, setActive] = useState('false');
+
+    const {data:currentUser = []} = useQuery({
+        queryKey:['users', user.email],
+        queryFn: async ()=>{
+            const res = await fetch(`http://localhost:5000/users?email=${user.email}`);
+            const data = await res.json();
+            return data[0];
+        }
+    })
+
+    const role = currentUser.role;
+
     const handleToggle = () => {
         setActive(!isActive);
     }
@@ -64,18 +77,25 @@ const SideBar = () => {
                             ) : (
                                 <UserMenu />
                             )} */}
-                            <Link to='/dashboard/all-buyers' className='ml-6 hover:bg-slate-400 p-2 block'>
+
+                            {(role === 'admin') && 
+                            <><Link to='/dashboard/all-buyers' className='ml-6 hover:bg-slate-400 p-2 block'>
                                 All Buyers</Link>
                             <Link to='/dashboard/all-sellers' className='ml-6 hover:bg-slate-400 p-2 block'>
                                 All Sellers</Link>
                             <Link to='/dashboard/reported-products' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                Reported Products</Link>
-                            <Link to='/dashboard/my-orders' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                My Orders</Link>
-                            <Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                Reported Products</Link></>}
+                            
+                            {(role === "seller") && 
+                            <><Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>
                                 Add a Product</Link>
                             <Link to='/dashboard/my-products' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                My Products</Link>
+                                My Products</Link></>}
+                            
+                            {(role === "buyer") && 
+                            <Link to='/dashboard/my-orders' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                My Orders</Link>}
+                            
                         </nav>
                     </div>
                 </div>

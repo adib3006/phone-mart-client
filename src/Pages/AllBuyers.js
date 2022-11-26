@@ -2,10 +2,10 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 const AllBuyers = () => {
-    const { data: sellers = [] } = useQuery({
-        queryKey: ['all-sellers'],
+    const { data: buyers = [] } = useQuery({
+        queryKey: ['all-buyers'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/dashboard/all-sellers');
+            const res = await fetch('http://localhost:5000/dashboard/all-buyers');
             const data = await res.json();
             return data;
         }
@@ -21,19 +21,15 @@ const AllBuyers = () => {
                             <th>Name</th>
                             <th>Email</th>
                             <th>Remove Action</th>
-                            <th>Verification</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            sellers.map((seller, i) => <tr key={seller._id}>
+                            buyers.map((seller, i) => <tr key={seller._id}>
                                 <th>{i + 1}</th>
                                 <td>{seller.userName}</td>
                                 <td>{seller.email}</td>
-                                <td><button className='btn'>Delete</button></td>
-                                <td>{(seller.status === 'notVerified') ? 
-                                <button className='btn'>Verify</button> : 
-                                <p>Verified</p>}</td>
+                                <td><button className='btn btn-error'>Delete</button></td>
                             </tr>)
                         }
 

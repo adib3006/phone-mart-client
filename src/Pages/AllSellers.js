@@ -30,7 +30,7 @@ const AllSellers = () => {
                                 <th>{i + 1}</th>
                                 <td>{seller.userName}</td>
                                 <td>{seller.email}</td>
-                                <td><button className='btn'>Delete</button></td>
+                                <td><button className='btn btn-error'>Delete</button></td>
                                 <td>{(seller.status === 'notVerified') ? 
                                 <button className='btn'>Verify</button> : 
                                 <p>Verified</p>}</td>
