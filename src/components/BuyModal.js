@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthProvider';
+import { toast } from 'react-hot-toast';
 
 const BuyModal = ({ phoneData, setPhoneData }) => {
     const { user } = useContext(AuthContext);
@@ -23,6 +24,7 @@ const BuyModal = ({ phoneData, setPhoneData }) => {
         };
         console.log(order);
         setPhoneData(null);
+        toast.success('Booking done !');
     }
     return (
         <div>
@@ -38,7 +40,7 @@ const BuyModal = ({ phoneData, setPhoneData }) => {
                         <input name='price' type="text" defaultValue={resellPrice} disabled className="input w-full input-bordered" />
                         <input name='phone' type="text" placeholder="Phone" className="input w-full input-bordered" required />
                         <input name='location' type="text" placeholder="Meeting Location" className="input w-full input-bordered" required />
-                        <input type="submit" value="Submit" className='w-full btn btn-accent' />
+                        <input type="submit" value="Submit" className='w-full btn btn-primary' />
                     </form>
                 </div>
             </div>

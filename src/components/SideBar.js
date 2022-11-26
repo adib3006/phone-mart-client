@@ -71,7 +71,7 @@ const SideBar = () => {
                             <Link className='ml-6 hover:bg-slate-400 p-2 block'>All Sellers</Link>
                             <Link className='ml-6 hover:bg-slate-400 p-2 block'>Reported Products</Link>
                             <Link className='ml-6 hover:bg-slate-400 p-2 block'>My Orders</Link>
-                            <Link className='ml-6 hover:bg-slate-400 p-2 block'>Add a Product</Link>
+                            <Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>Add a Product</Link>
                             <Link className='ml-6 hover:bg-slate-400 p-2 block'>My Products</Link>
                         </nav>
                     </div>
