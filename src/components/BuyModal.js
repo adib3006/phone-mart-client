@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthProvider';
 import { toast } from 'react-hot-toast';
 
-const BuyModal = ({ refetch ,phoneData, setPhoneData }) => {
+const BuyModal = ({ refetch, phoneData, setPhoneData }) => {
     const { user } = useContext(AuthContext);
-    const { name, resellPrice } = phoneData;
+    const { name, resellPrice, image, _id } = phoneData;
     const handleBooking = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -20,9 +20,37 @@ const BuyModal = ({ refetch ,phoneData, setPhoneData }) => {
             phoneName,
             price,
             phone,
-            location
+            location,
+            image,
+            productId: _id,
+            payment:false
         };
         console.log(order);
+
+        fetch('http://localhost:5000/orders', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(order)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.acknowledged) {
+                    fetch(`http://localhost:5000/orders/phone/${_id}`, {
+                        method: 'PATCH'
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.modifiedCount > 0) {
+                                toast.success('Phones updated successfully');
+                                console.log(data.modifiedCount);
+                            }
+                        })
+                }
+            })
+            .catch(err => console.error(err))
+
         setPhoneData(null);
         toast.success('Booking done !');
         refetch();
