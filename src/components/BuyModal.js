@@ -45,6 +45,7 @@ const BuyModal = ({ refetch, phoneData, setPhoneData }) => {
                             if (data.modifiedCount > 0) {
                                 toast.success('Phones updated successfully');
                                 console.log(data.modifiedCount);
+                                refetch();
                             }
                         })
                 }
@@ -53,7 +54,6 @@ const BuyModal = ({ refetch, phoneData, setPhoneData }) => {
 
         setPhoneData(null);
         toast.success('Booking done !');
-        refetch();
     }
     return (
         <div>
