@@ -4,6 +4,7 @@ import Main from "../layouts/Main";
 import Blog from "../Pages/Blog";
 import Home from "../Pages/Home";
 import Login from "../Pages/Login";
+import PhoneCategories from "../Pages/PhoneCategories";
 import SignUp from "../Pages/SignUp";
 import Welcome from "../Pages/Welcome";
 
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
             {
                 path:'/',
                 element:<Home></Home>
+            },
+            {
+                path:'/categories/:id',
+                element:<PhoneCategories></PhoneCategories>
             },
             {
                 path:'/login',
