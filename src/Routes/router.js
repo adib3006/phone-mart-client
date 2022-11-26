@@ -9,6 +9,10 @@ import MyProducts from "../Pages/MyProducts";
 import PhoneCategories from "../Pages/PhoneCategories";
 import SignUp from "../Pages/SignUp";
 import Welcome from "../Pages/Welcome";
+import AllSellers from './../Pages/AllSellers';
+import AllBuyers from './../Pages/AllBuyers';
+import ReportedProducts from './../Pages/ReportedProducts';
+import MyOrders from './../Pages/MyOrders';
 
 export const router = createBrowserRouter([
     {
@@ -52,6 +56,22 @@ export const router = createBrowserRouter([
             {
                 path:'/dashboard/my-products',
                 element:<MyProducts></MyProducts>
+            },
+            {
+                path:'/dashboard/all-sellers',
+                element:<AllSellers></AllSellers>
+            },
+            {
+                path:'/dashboard/all-buyers',
+                element:<AllBuyers></AllBuyers>
+            },
+            {
+                path:'/dashboard/reported-products',
+                element:<ReportedProducts></ReportedProducts>
+            },
+            {
+                path:'/dashboard/my-orders',
+                element:<MyOrders></MyOrders>
             }
         ]
     }

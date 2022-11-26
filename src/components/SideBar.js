@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import { AuthContext } from './../contexts/AuthProvider';
 
 const SideBar = () => {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [isActive, setActive] = useState('false');
     const handleToggle = () => {
         setActive(!isActive);
@@ -38,24 +39,20 @@ const SideBar = () => {
                             <Link to='/'>Phone <span className='text-lime-400'>Mart</span></Link>
                         </h2>
                         <div className='flex flex-col items-center mt-6 -mx-2'>
+                            <h4 className='mx-2 my-2 text-2xl font-medium text-gray-800  hover:underline'>
+                                {user?.displayName}
+                            </h4>
                             <Link to='/dashboard'>
                                 <img
-                                    className='object-cover w-24 h-24 mx-2 rounded-full'
+                                    className='object-cover w-24 h-24 mx-2 rounded-lg'
                                     src={user?.photoURL}
                                     alt='avatar'
                                     referrerPolicy='no-referrer'
                                 />
                             </Link>
-                            <Link to='/dashboard'>
-                                <h4 className='mx-2 mt-2 font-medium text-gray-800  hover:underline'>
-                                    {user?.displayName}
-                                </h4>
-                            </Link>
-                            <Link to='/dashboard'>
-                                <p className='mx-2 mt-1 text-sm font-medium text-gray-600  hover:underline'>
-                                    {user?.email}
-                                </p>
-                            </Link>
+                            <p className='mx-2 mt-1 text-sm font-medium text-gray-600  hover:underline'>
+                                {user?.email}
+                            </p>
                         </div>
                     </div>
 
@@ -67,19 +64,28 @@ const SideBar = () => {
                             ) : (
                                 <UserMenu />
                             )} */}
-                            <Link className='ml-6 hover:bg-slate-400 p-2 block'>All Buyers</Link>
-                            <Link className='ml-6 hover:bg-slate-400 p-2 block'>All Sellers</Link>
-                            <Link className='ml-6 hover:bg-slate-400 p-2 block'>Reported Products</Link>
-                            <Link className='ml-6 hover:bg-slate-400 p-2 block'>My Orders</Link>
-                            <Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>Add a Product</Link>
-                            <Link to='/dashboard/my-products' className='ml-6 hover:bg-slate-400 p-2 block'>My Products</Link>
+                            <Link to='/dashboard/all-buyers' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                All Buyers</Link>
+                            <Link to='/dashboard/all-sellers' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                All Sellers</Link>
+                            <Link to='/dashboard/reported-products' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                Reported Products</Link>
+                            <Link to='/dashboard/my-orders' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                My Orders</Link>
+                            <Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                Add a Product</Link>
+                            <Link to='/dashboard/my-products' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                My Products</Link>
                         </nav>
                     </div>
                 </div>
 
                 <div>
                     <hr />
-                    <button className='btn btn-ghost' handler={logout}>
+                    <button className='btn btn-ghost' onClick={()=>{
+                        logOut()
+                        .then(()=>navigate('/'))
+                    }}>
                         <span className='mx-4 font-medium'>Logout</span>
                     </button>
                 </div>

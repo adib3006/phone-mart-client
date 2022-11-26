@@ -37,7 +37,8 @@ const SignUp = () => {
                                     userName: name,
                                     email,
                                     photoURL: imageData.data.display_url,
-                                    role
+                                    role,
+                                    status: "notVerified"
                                 }
                                 console.log(user);
 

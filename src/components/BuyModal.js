@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthProvider';
 import { toast } from 'react-hot-toast';
 
-const BuyModal = ({ phoneData, setPhoneData }) => {
+const BuyModal = ({ refetch ,phoneData, setPhoneData }) => {
     const { user } = useContext(AuthContext);
     const { name, resellPrice } = phoneData;
     const handleBooking = (event) => {
@@ -25,6 +25,7 @@ const BuyModal = ({ phoneData, setPhoneData }) => {
         console.log(order);
         setPhoneData(null);
         toast.success('Booking done !');
+        refetch();
     }
     return (
         <div>
@@ -34,7 +35,7 @@ const BuyModal = ({ phoneData, setPhoneData }) => {
                     <label htmlFor="buy-modal" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
                     <h3 className="text-lg font-bold">Book your product</h3>
                     <form onSubmit={handleBooking} className='grid grid-cols-1 gap-3'>
-                        <input name='userName' type="text" value={user.displayName} disabled className="input w-full input-bordered" />
+                        <input name='userName' type="text" value={user?.displayName} disabled className="input w-full input-bordered" />
                         <input name='email' type="email" defaultValue={user?.email} disabled className="input w-full input-bordered" />
                         <input name='phoneName' type="text" defaultValue={name} disabled className="input w-full input-bordered" />
                         <input name='price' type="text" defaultValue={resellPrice} disabled className="input w-full input-bordered" />

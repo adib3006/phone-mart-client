@@ -8,7 +8,7 @@ const PhoneCategories = () => {
     const { id } = useParams();
     const [phoneData, setPhoneData] = useState(null);
     const [category, setCategory] = useState('');
-    const { data: phones = [] } = useQuery({
+    const { data: phones = [], refetch } = useQuery({
         queryKey: ['categories', id],
         queryFn: async () => {
             const res = await fetch(`http://localhost:5000/categories/${id}`);
@@ -26,7 +26,7 @@ const PhoneCategories = () => {
                     phones.map(phone => <PhoneCard key={phone._id} phone={phone} setPhoneData={setPhoneData}></PhoneCard>)
                 }
             </div>
-            {phoneData && <BuyModal phoneData={phoneData} setPhoneData={setPhoneData}></BuyModal>}
+            {phoneData && <BuyModal refetch={refetch} phoneData={phoneData} setPhoneData={setPhoneData}></BuyModal>}
         </div>
     );
 };
