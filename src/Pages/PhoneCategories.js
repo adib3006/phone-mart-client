@@ -23,7 +23,7 @@ const PhoneCategories = () => {
             <h1 className="text-5xl font-bold text-center mt-10 mb-10">{category}</h1>
             <div className='ml-10 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                 {
-                    phones.map(phone => <PhoneCard key={phone.id} phone={phone} setPhoneData={setPhoneData}></PhoneCard>)
+                    phones.map(phone => <PhoneCard key={phone._id} phone={phone} setPhoneData={setPhoneData}></PhoneCard>)
                 }
             </div>
             {phoneData && <BuyModal phoneData={phoneData} setPhoneData={setPhoneData}></BuyModal>}
