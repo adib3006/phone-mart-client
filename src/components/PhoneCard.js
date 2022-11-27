@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
+import { toast } from 'react-hot-toast';
 
 const PhoneCard = ({ phone, setPhoneData }) => {
-    const { image, name, location, resellPrice, originalPrice, yearsOfUse, postDate, sellerName, sellerEmail } = phone;
+    const { _id, image, name, location, resellPrice, originalPrice, yearsOfUse, postDate, sellerName, sellerEmail } = phone;
     const [status, setStatus] = useState('hidden');
     
     useEffect(()=>{
@@ -20,6 +21,19 @@ const PhoneCard = ({ phone, setPhoneData }) => {
         console.log("clicked");
         setPhoneData(phone);
     }
+
+    const handleReport = (id) => {
+        fetch(`http://localhost:5000/report/${id}`, {
+            method: 'PATCH'
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount > 0) {
+                    toast.success('Reported to admin for review');
+                }
+            })
+    }
+
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
             {
@@ -39,6 +53,7 @@ const PhoneCard = ({ phone, setPhoneData }) => {
                             </p>
                             <div className="card-actions justify-end">
                                 <label onClick={handleBook} htmlFor="buy-modal" className="btn btn-primary">Buy</label>
+                                <button onClick={()=>handleReport(_id)} className='btn btn-error'>Report</button>
                             </div>
                         </div>
                     </> : <p>no phones available</p>
