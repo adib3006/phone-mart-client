@@ -15,14 +15,21 @@ import ReportedProducts from './../Pages/ReportedProducts';
 import MyOrders from './../Pages/MyOrders';
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
+import SellerRoute from "./SellerRoute";
+import ErrorPage from "../Pages/ErrorPage";
 
 export const router = createBrowserRouter([
     {
         path:'/',
         element: <Main></Main>,
+        errorElement:<ErrorPage></ErrorPage>,
         children: [
             {
                 path:'/',
+                element:<Home></Home>
+            },
+            {
+                path:'/home',
                 element:<Home></Home>
             },
             {
@@ -46,6 +53,7 @@ export const router = createBrowserRouter([
     {
         path:'/dashboard',
         element:<PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
+        errorElement:<ErrorPage></ErrorPage>,
         children: [
             {
                 path:'/dashboard',
@@ -53,11 +61,11 @@ export const router = createBrowserRouter([
             },
             {
                 path:'/dashboard/add-product',
-                element: <AddProduct></AddProduct>
+                element: <SellerRoute><AddProduct></AddProduct></SellerRoute>
             },
             {
                 path:'/dashboard/my-products',
-                element:<MyProducts></MyProducts>
+                element: <SellerRoute><MyProducts></MyProducts></SellerRoute>
             },
             {
                 path:'/dashboard/all-sellers',
@@ -73,7 +81,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:'/dashboard/my-orders',
-                element:<MyOrders></MyOrders>
+                element:<PrivateRoute><MyOrders></MyOrders></PrivateRoute>
             }
         ]
     }
