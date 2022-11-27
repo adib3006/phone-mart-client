@@ -17,14 +17,25 @@ const Login = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
-        signIn(email, password)
-            .then((result) => {
-                navigate(from, { replace: true });
-                setError('');
-                form.reset();
-            })
-            .catch((error) => { setError(error.message) })
 
+        fetch(`http://localhost:5000/users?email=${email}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data[0]);
+                if(data[0]?.email === email){
+                    signIn(email, password)
+                    .then((result) => {
+                        navigate(from, { replace: true });
+                        setError('');
+                        form.reset();
+                    })
+                    .catch((error) => { setError(error.message) })
+                }
+                else{
+                    toast.error("User doesn't exist");
+                    form.reset();
+                }
+            })
     }
 
     const handlePasswordReset = () => {

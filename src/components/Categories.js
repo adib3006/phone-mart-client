@@ -18,8 +18,8 @@ const Categories = () => {
             <h1 className="text-5xl font-bold text-center mt-20 mb-10">Categories</h1>
             <div className='ml-10 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                 {
-                    categories.map((category,i) => <Link key={i} to={`/categories/${category.categoryId}`}><CategoryCard 
-                        key={category.categoryId} 
+                    categories.map((category,i) => <Link key={i} to={`/categories/${category._id}`}><CategoryCard 
+                        key={category._id} 
                         category={category}
                         ></CategoryCard></Link>)
                 }
