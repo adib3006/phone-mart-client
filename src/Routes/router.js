@@ -13,6 +13,7 @@ import AllSellers from './../Pages/AllSellers';
 import AllBuyers from './../Pages/AllBuyers';
 import ReportedProducts from './../Pages/ReportedProducts';
 import MyOrders from './../Pages/MyOrders';
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -25,7 +26,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:'/categories/:id',
-                element:<PhoneCategories></PhoneCategories>
+                element:<PrivateRoute><PhoneCategories></PhoneCategories></PrivateRoute>
             },
             {
                 path:'/login',
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
     },
     {
         path:'/dashboard',
-        element:<DashboardLayout></DashboardLayout>,
+        element:<PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
         children: [
             {
                 path:'/dashboard',

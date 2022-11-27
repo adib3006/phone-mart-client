@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 
 const PhoneCard = ({ phone, setPhoneData }) => {
-    const { image, name, location, resellPrice, originalPrice, yearsOfUse, postDate, sellerName } = phone;
+    const { image, name, location, resellPrice, originalPrice, yearsOfUse, postDate, sellerName, sellerEmail } = phone;
+    const [status, setStatus] = useState('hidden');
+    
+    useEffect(()=>{
+        fetch(`http://localhost:5000/users?email=${sellerEmail}`)
+        .then(res=>res.json())
+        .then(data=>{
+            if(data[0].status === 'verified'){
+                setStatus('block')
+            }
+        })
+    },[sellerEmail])
+
     const date = parseISO(postDate);
     const handleBook = () => {
         console.log("clicked");
@@ -21,7 +33,10 @@ const PhoneCard = ({ phone, setPhoneData }) => {
                             <p>Original Price: {originalPrice}</p>
                             <p>Years of use: {yearsOfUse}</p>
                             <p>Posted on: {format(date, 'Pp')}</p>
-                            <p>Seller Name: {sellerName}</p>
+                            <p className='flex'>
+                                <span>Seller Name: {sellerName}</span>
+                                <img className={`w-5 h-5 p-1 mt-0.5 ml-1 bg-slate-200 rounded-full ${status}`} src="https://i.ibb.co/Ldhzq2s/blue-tick.png" alt="" />
+                            </p>
                             <div className="card-actions justify-end">
                                 <label onClick={handleBook} htmlFor="buy-modal" className="btn btn-primary">Buy</label>
                             </div>
