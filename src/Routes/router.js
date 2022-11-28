@@ -17,6 +17,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import SellerRoute from "./SellerRoute";
 import ErrorPage from "../Pages/ErrorPage";
+import Payment from "../Pages/Payment";
 
 export const router = createBrowserRouter([
     {
@@ -82,6 +83,11 @@ export const router = createBrowserRouter([
             {
                 path:'/dashboard/my-orders',
                 element:<PrivateRoute><MyOrders></MyOrders></PrivateRoute>
+            },
+            {
+                path:'/dashboard/payment/:id',
+                element:<PrivateRoute><Payment></Payment></PrivateRoute>,
+                loader:({params})=>fetch(`http://localhost:5000/orders/${params.id}`)
             }
         ]
     }
