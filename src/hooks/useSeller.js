@@ -5,10 +5,9 @@ const useSeller = email => {
     const [isSellerLoading, setIsSellerLoading] = useState(true);
     useEffect(() => {
         if (email) {
-            fetch(`http://localhost:5000/users?email=${email}`)
+            fetch(`https://phone-mart-server.vercel.app/users?email=${email}`)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
                     if (data[0].role === "seller") {
                         setIsSeller(true);
                         setIsSellerLoading(false);

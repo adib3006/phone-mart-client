@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import SmallSpinner from '../components/SmallSpinner';
 import { AuthContext } from './../contexts/AuthProvider';
 import useToken from './../hooks/useToken';
 
@@ -8,6 +9,7 @@ const Login = () => {
     const { signIn, googleSignIn, passwordReset } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const [loading,setLoading] = useState(false);
     const [error, setError] = useState('');
     const [loginUserEmail, setLoginUserEmail] = useState('');
     const [token] = useToken(loginUserEmail);
@@ -19,20 +21,20 @@ const Login = () => {
     }
 
     const handleSubmit = (event) => {
+        setLoading(true);
         event.preventDefault();
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password);
 
-        fetch(`http://localhost:5000/users?email=${email}`)
+        fetch(`https://phone-mart-server.vercel.app/users?email=${email}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data[0]);
                 if(data[0]?.email === email){
                     signIn(email, password)
                     .then((result) => {
                         setLoginUserEmail(email);
+                        setLoading(false);
                         //navigate(from, { replace: true });
                         setError('');
                         form.reset();
@@ -114,12 +116,20 @@ const Login = () => {
                         error && <p className='text-red-500'>{error}</p>
                     }
                     <div>
+                        { loading ? <button
+                            type='submit'
+                            className='w-full px-8 py-3 font-semibold rounded-md bg-lime-600 hover:bg-lime-500 hover:text-white text-gray-100'
+                            disabled={loading}
+                        >
+                            <SmallSpinner></SmallSpinner>
+                        </button> 
+                        : 
                         <button
                             type='submit'
                             className='w-full px-8 py-3 font-semibold rounded-md bg-lime-600 hover:bg-lime-500 hover:text-white text-gray-100'
                         >
-                            Sign in
-                        </button>
+                            Log in
+                        </button>}
                     </div>
                 </form>
                 <div className='space-y-1'>

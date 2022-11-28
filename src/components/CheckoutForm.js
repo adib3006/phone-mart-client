@@ -16,7 +16,7 @@ const CheckoutForm = ({order}) => {
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
-        fetch("http://localhost:5000/create-payment-intent", {
+        fetch("https://phone-mart-server.vercel.app/create-payment-intent", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@ const CheckoutForm = ({order}) => {
                 productId,
                 orderId:_id
             }
-            fetch('http://localhost:5000/payments', {
+            fetch('https://phone-mart-server.vercel.app/payments', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
@@ -90,7 +90,6 @@ const CheckoutForm = ({order}) => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data);
                     if (data.insertedId) {
                         setSuccess('Congrats! your payment completed');
                         setTransactionId(paymentIntent.id);
@@ -98,7 +97,7 @@ const CheckoutForm = ({order}) => {
                 })
         }
         setProcessing(false);
-        navigate('/dashboard/my-orders')
+        navigate('/dashboard')
     }
     return (
         <>

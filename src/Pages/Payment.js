@@ -8,7 +8,6 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
 
 const Payment = () => {
     const order = useLoaderData();
-    console.log(order);
     return (
         <div>
             <h1 className='text-5xl'>Payment for {order?.phoneName}</h1>

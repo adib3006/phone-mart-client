@@ -6,14 +6,14 @@ const ReportedProducts = () => {
     const { data: products = [], refetch } = useQuery({
         queryKey: ['categories'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/reported-products');
+            const res = await fetch('https://phone-mart-server.vercel.app/reported-products');
             const data = await res.json();
             return data;
         }
     })
 
     const handleSolved = (id) => {
-        fetch(`http://localhost:5000/reported-products/resolve/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/reported-products/resolve/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())
@@ -26,7 +26,7 @@ const ReportedProducts = () => {
     }
 
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/reported-products/delete/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/reported-products/delete/${id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())

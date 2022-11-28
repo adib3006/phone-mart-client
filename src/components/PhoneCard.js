@@ -7,7 +7,7 @@ const PhoneCard = ({ phone, setPhoneData }) => {
     const [status, setStatus] = useState('hidden');
     
     useEffect(()=>{
-        fetch(`http://localhost:5000/users?email=${sellerEmail}`)
+        fetch(`https://phone-mart-server.vercel.app/users?email=${sellerEmail}`)
         .then(res=>res.json())
         .then(data=>{
             if(data[0].status === 'verified'){
@@ -18,12 +18,11 @@ const PhoneCard = ({ phone, setPhoneData }) => {
 
     const date = parseISO(postDate);
     const handleBook = () => {
-        console.log("clicked");
         setPhoneData(phone);
     }
 
     const handleReport = (id) => {
-        fetch(`http://localhost:5000/report/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/report/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())

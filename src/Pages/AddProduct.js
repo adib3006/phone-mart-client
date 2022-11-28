@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from './../contexts/AuthProvider';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 const AddProduct = () => {
     const { user } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const handleSubmit = (event) => {
+        setLoading(true);
         event.preventDefault();
         const form = event.target;
         const name = form.name.value;
@@ -19,7 +21,6 @@ const AddProduct = () => {
         const description = form.description.value;
         const location = form.location.value;
         const yearsOfUse = form.yearsOfUse.value;
-        // const postDate = new Date();
         const report = false;
         const advertise = false;
         const sold = false;
@@ -52,9 +53,8 @@ const AddProduct = () => {
                     sellerEmail: user.email,
                     payment:false
                 }
-                console.log(phone);
 
-                fetch('http://localhost:5000/dashboard/add-product', {
+                fetch('https://phone-mart-server.vercel.app/dashboard/add-product', {
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json'
@@ -64,6 +64,7 @@ const AddProduct = () => {
                     .then(res => res.json())
                     .then(data => {
                         if (data.acknowledged) {
+                            setLoading(false)
                             form.reset();
                             toast.success('Phone added successfully');
                             navigate('/dashboard/my-products');
@@ -79,9 +80,9 @@ const AddProduct = () => {
             <div className='w-1/2'>
                 <h1 className="text-5xl text-center my-5">Add a Product</h1>
                 <form onSubmit={handleSubmit} className='grid grid-cols-1 gap-3'>
-                    <input name='name' placeholder='Product Name' type="text" className="input w-full input-bordered" />
+                    <input name='name' placeholder='Product Name' type="text" className="input w-full input-bordered" required/>
                     <input type='file' id='image' name='image' accept='image/*' />
-                    <input name='resellPrice' placeholder='price' type="text" className="input w-full input-bordered" />
+                    <input name='resellPrice' placeholder='price' type="text" className="input w-full input-bordered" required/>
                     <select name='condition' className='select select-bordered w-full'>
                         <option value="good">Good</option>
                         <option value="fair">Fair</option>
@@ -93,11 +94,11 @@ const AddProduct = () => {
                         <option value="03">Feature</option>
                     </select>
                     <input name='phoneNumber' placeholder='phone number' type="text" className="input w-full input-bordered" />
-                    <input name='originalPrice' placeholder='Original price' type="text" className="input w-full input-bordered" />
+                    <input name='originalPrice' placeholder='Original price' type="text" className="input w-full input-bordered" required/>
                     <input name='description' type="text" placeholder="description" className="input w-full input-bordered" />
                     <input name='location' type="text" placeholder="Meeting Location" className="input w-full input-bordered" />
                     <input name='yearsOfUse' type="text" placeholder="Years of use" className="input w-full input-bordered" />
-                    <input type="submit" value="Submit" className='w-full btn btn-primary' />
+                    <input type="submit" value="Submit" disabled={loading} className='w-full btn btn-primary' />
                 </form>
             </div>
         </div>

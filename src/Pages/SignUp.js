@@ -4,22 +4,21 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import useToken from '../hooks/useToken';
+import SmallSpinner from './../components/SmallSpinner';
 
 const SignUp = () => {
     const { createUser, updateUser, googleSignIn } = useContext(AuthContext);
     const [createdUserEmail, setCreatedUserEmail] = useState('');
+    const [loading, setLoading] = useState(false);
     const [token] = useToken(createdUserEmail);
     const navigate = useNavigate();
-    //const location = useLocation();
-
-    //const from = location.state?.from?.pathname || '/';
 
     if (token) {
-        //navigate(from, { replace: true });
         navigate('/');
     }
 
     const handleSubmit = (event) => {
+        setLoading(true);
         event.preventDefault();
         const form = event.target;
         const name = form.name.value;
@@ -49,9 +48,8 @@ const SignUp = () => {
                                     role,
                                     status: "notVerified"
                                 }
-                                console.log(user);
 
-                                fetch('http://localhost:5000/users', {
+                                fetch('https://phone-mart-server.vercel.app/users', {
                                     method: 'POST',
                                     headers: {
                                         'content-type': 'application/json'
@@ -63,6 +61,7 @@ const SignUp = () => {
                                         if (data.acknowledged) {
                                             form.reset();
                                             setCreatedUserEmail(email);
+                                            setLoading(false);
                                             toast.success('user added successfully');
                                         }
                                     })
@@ -92,15 +91,15 @@ const SignUp = () => {
                     role: "buyer",
                     status: "notVerified"
                 }
-                console.log(user);
-                axios('http://localhost:5000/users', {
+
+                axios('https://phone-mart-server.vercel.app/users', {
                     method: 'POST',
                     data: user,
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(res => res.json())
+                    .then(res => res.json())
                     .then(data => {
                         if (data.acknowledged) {
                             setCreatedUserEmail(email);
@@ -108,21 +107,6 @@ const SignUp = () => {
                         }
                     })
                     .catch(err => console.error(err))
-                // fetch('http://localhost:5000/users', {
-                //     method: 'POST',
-                //     headers: {
-                //         'content-type': 'application/json'
-                //     },
-                //     body: JSON.stringify(user)
-                // })
-                    // .then(res => res.json())
-                    // .then(data => {
-                    //     if (data.acknowledged) {
-                    //         toast.success('user added successfully');
-                    //     }
-                    // })
-                    // .catch(err => console.error(err))
-                //navigate(from, { replace: true });
             })
             .catch((error) => { console.error(error) })
     }
@@ -211,7 +195,9 @@ const SignUp = () => {
                             type='submit'
                             className='w-full px-8 py-3 font-semibold rounded-md bg-lime-600 hover:bg-lime-500 hover:text-white text-gray-100'
                         >
-                            Sign Up
+                            {
+                                loading ? <SmallSpinner></SmallSpinner> : "Sign Up"
+                            }
                         </button>
                     </div>
                 </form>

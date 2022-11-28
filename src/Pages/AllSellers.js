@@ -6,14 +6,14 @@ const AllSellers = () => {
     const { data: sellers = [],refetch } = useQuery({
         queryKey: ['all-sellers'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/dashboard/all-sellers');
+            const res = await fetch('https://phone-mart-server.vercel.app/dashboard/all-sellers');
             const data = await res.json();
             return data;
         }
     })
 
     const handleVerifySeller = (id) => {
-        fetch(`http://localhost:5000/all-seller/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/all-seller/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())
@@ -26,7 +26,7 @@ const AllSellers = () => {
     }
 
     const handleDeleteUser = (id) => {
-        fetch(`http://localhost:5000/delete/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/delete/${id}`, {
             method: 'DELETE'
         })
             .then(res => res.json())

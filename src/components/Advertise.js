@@ -7,7 +7,7 @@ const Advertise = () => {
     const { data: phone = {}, refetch } = useQuery({
         queryKey: ['phone'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/phone');
+            const res = await fetch('https://phone-mart-server.vercel.app/phone');
             const data = await res.json();
             return data;
         }

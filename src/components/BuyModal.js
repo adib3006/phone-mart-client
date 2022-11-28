@@ -26,9 +26,8 @@ const BuyModal = ({ refetch, phoneData, setPhoneData }) => {
             productId: _id,
             payment: false
         };
-        console.log(order);
 
-        fetch('http://localhost:5000/orders', {
+        fetch('https://phone-mart-server.vercel.app/orders', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -38,7 +37,7 @@ const BuyModal = ({ refetch, phoneData, setPhoneData }) => {
             .then(res => res.json())
             .then(data => {
                 if (data.acknowledged) {
-                    fetch(`http://localhost:5000/orders/phone/${_id}`, {
+                    fetch(`https://phone-mart-server.vercel.app/orders/phone/${_id}`, {
                         method: 'PATCH'
                     })
                         .then(res => res.json())

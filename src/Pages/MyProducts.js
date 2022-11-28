@@ -8,7 +8,7 @@ const MyProducts = () => {
     const { data: products = [], refetch } = useQuery({
         queryKey: ['my-products', user.email],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/dashboard/my-products?email=${user.email}`,{
+            const res = await fetch(`https://phone-mart-server.vercel.app/dashboard/my-products?email=${user.email}`,{
                 headers: {
                     authorization: `bearer ${localStorage.getItem('accessToken')}`
                 }
@@ -18,59 +18,53 @@ const MyProducts = () => {
         }
     })
 
-    console.log(products);
-
     const handleMakeAvailable = (id) => {
-        fetch(`http://localhost:5000/my-products/sold/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/my-products/sold/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())
             .then(data => {
                 if (data.modifiedCount > 0) {
                     toast.success('Sold Status updated successfully');
-                    console.log(data.modifiedCount);
                     refetch();
                 }
             })
     }
 
     const handleAdvertise = (id) => {
-        fetch(`http://localhost:5000/my-products/ad/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/my-products/ad/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())
             .then(data => {
                 if (data.modifiedCount > 0) {
                     toast.success('Sold Status updated successfully');
-                    console.log(data.modifiedCount);
                     refetch();
                 }
             })
     }
 
     const handleMarkSold = (id) => {
-        fetch(`http://localhost:5000/orders/phone/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/orders/phone/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())
             .then(data => {
                 if (data.modifiedCount > 0) {
                     toast.success('Phones updated successfully');
-                    console.log(data.modifiedCount);
                     refetch();
                 }
             })
     }
 
     const handlePriceRemove = (id) => {
-        fetch(`http://localhost:5000/my-products/price/${id}`, {
+        fetch(`https://phone-mart-server.vercel.app/my-products/price/${id}`, {
             method: 'PATCH'
         })
             .then(res => res.json())
             .then(data => {
                 if (data.modifiedCount > 0) {
                     toast.success('Sold Status updated successfully');
-                    console.log(data.modifiedCount);
                     refetch();
                 }
             })

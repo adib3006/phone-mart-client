@@ -11,7 +11,7 @@ const PhoneCategories = () => {
     const { data: phones = [], refetch } = useQuery({
         queryKey: ['categories', id],
         queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/categories/${id}`);
+            const res = await fetch(`https://phone-mart-server.vercel.app/categories/${id}`);
             const data = await res.json();
             setCategory(data.name);
             return data.phoneCategory;
