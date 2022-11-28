@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from './../contexts/AuthProvider';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 const SignUp = () => {
     const { createUser, updateUser, googleSignIn } = useContext(AuthContext);
@@ -21,7 +22,7 @@ const SignUp = () => {
         const formData = new FormData();
         formData.append('image', image);
 
-        const url = "https://api.imgbb.com/1/upload?key=b061ec1a58988f7f375c0629ea0844cd";
+        const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgbb_key}`;
 
         fetch(url, {
             method: "POST",
@@ -74,7 +75,43 @@ const SignUp = () => {
     const handleGoogleSignIn = () => {
         googleSignIn()
             .then((result) => {
-                console.log(result);
+                const { email, displayName, photoURL } = result.user;
+                const user = {
+                    userName: displayName,
+                    email,
+                    photoURL,
+                    role: "buyer",
+                    status: "notVerified"
+                }
+                console.log(user);
+                axios('http://localhost:5000/users', {
+                    method: 'POST',
+                    data: user,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                    .then(data => {
+                        if (data.acknowledged) {
+                            toast.success('user added successfully');
+                        }
+                    })
+                    .catch(err => console.error(err))
+                // fetch('http://localhost:5000/users', {
+                //     method: 'POST',
+                //     headers: {
+                //         'content-type': 'application/json'
+                //     },
+                //     body: JSON.stringify(user)
+                // })
+                    // .then(res => res.json())
+                    // .then(data => {
+                    //     if (data.acknowledged) {
+                    //         toast.success('user added successfully');
+                    //     }
+                    // })
+                    // .catch(err => console.error(err))
                 navigate(from, { replace: true });
             })
             .catch((error) => { console.error(error) })

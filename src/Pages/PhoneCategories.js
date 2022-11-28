@@ -17,7 +17,6 @@ const PhoneCategories = () => {
             return data.phoneCategory;
         }
     })
-    console.log(phones);
     return (
         <div>
             <h1 className="text-5xl font-bold text-center mt-10 mb-10">{category}</h1>

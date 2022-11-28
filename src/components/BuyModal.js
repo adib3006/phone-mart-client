@@ -44,8 +44,6 @@ const BuyModal = ({ refetch, phoneData, setPhoneData }) => {
                         .then(res => res.json())
                         .then(data => {
                             if (data.modifiedCount > 0) {
-                                toast.success('Phones updated successfully');
-                                console.log(data.modifiedCount);
                                 refetch();
                             }
                         })

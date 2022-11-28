@@ -13,9 +13,6 @@ const Advertise = () => {
         }
     })
 
-    console.log(phone.length);
-    console.log(phone[0]);
-
     const handleBook = () => {
         setPhoneData(phone[0]);
     }

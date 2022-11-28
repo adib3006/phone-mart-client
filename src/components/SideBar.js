@@ -72,12 +72,6 @@ const SideBar = () => {
                     {/* Nav Items */}
                     <div className='flex flex-col justify-between flex-1 mt-6'>
                         <nav>
-                            {/* {role && role !== 'requested' ? (
-                                <>{role === 'admin' ? <AdminMenu /> : <HostMenu />} </>
-                            ) : (
-                                <UserMenu />
-                            )} */}
-
                             {(role === 'admin') && 
                             <><Link to='/dashboard/all-buyers' className='ml-6 hover:bg-slate-400 p-2 block'>
                                 All Buyers</Link>
@@ -92,7 +86,7 @@ const SideBar = () => {
                             <Link to='/dashboard/my-products' className='ml-6 hover:bg-slate-400 p-2 block'>
                                 My Products</Link></>}
                             
-                            {(role === "buyer") && 
+                            {(role !== "admin" && role !== "seller") && 
                             <Link to='/dashboard/my-orders' className='ml-6 hover:bg-slate-400 p-2 block'>
                                 My Orders</Link>}
                             

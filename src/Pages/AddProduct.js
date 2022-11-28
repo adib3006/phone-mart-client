@@ -27,8 +27,7 @@ const AddProduct = () => {
         const formData = new FormData();
         formData.append('image', image);
 
-        const url = "https://api.imgbb.com/1/upload?key=b061ec1a58988f7f375c0629ea0844cd";
-
+        const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgbb_key}`;
         fetch(url, {
             method: "POST",
             body: formData
@@ -46,12 +45,12 @@ const AddProduct = () => {
                     description,
                     location,
                     yearsOfUse,
-                    // postDate,
                     report,
                     advertise,
                     sold,
                     sellerName: user.displayName,
-                    sellerEmail: user.email
+                    sellerEmail: user.email,
+                    payment:false
                 }
                 console.log(phone);
 
