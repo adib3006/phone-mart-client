@@ -1,15 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from './../contexts/AuthProvider';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import useToken from '../hooks/useToken';
 
 const SignUp = () => {
     const { createUser, updateUser, googleSignIn } = useContext(AuthContext);
+    const [createdUserEmail, setCreatedUserEmail] = useState('');
+    const [token] = useToken(createdUserEmail);
     const navigate = useNavigate();
-    const location = useLocation();
+    //const location = useLocation();
 
-    const from = location.state?.from?.pathname || '/';
+    //const from = location.state?.from?.pathname || '/';
+
+    if (token) {
+        //navigate(from, { replace: true });
+        navigate('/');
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -54,13 +62,14 @@ const SignUp = () => {
                                     .then(data => {
                                         if (data.acknowledged) {
                                             form.reset();
+                                            setCreatedUserEmail(email);
                                             toast.success('user added successfully');
                                         }
                                     })
                                     .catch(err => console.error(err))
 
                                 toast.success('User created successfully');
-                                navigate(from, { replace: true });
+                                //navigate(from, { replace: true });
                             })
                             .catch(err => console.log(err))
                     })
@@ -94,6 +103,7 @@ const SignUp = () => {
                 .then(res => res.json())
                     .then(data => {
                         if (data.acknowledged) {
+                            setCreatedUserEmail(email);
                             toast.success('user added successfully');
                         }
                     })
@@ -112,7 +122,7 @@ const SignUp = () => {
                     //     }
                     // })
                     // .catch(err => console.error(err))
-                navigate(from, { replace: true });
+                //navigate(from, { replace: true });
             })
             .catch((error) => { console.error(error) })
     }

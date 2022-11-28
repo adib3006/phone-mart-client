@@ -2,14 +2,21 @@ import React, { useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from './../contexts/AuthProvider';
+import useToken from './../hooks/useToken';
 
 const Login = () => {
     const { signIn, googleSignIn, passwordReset } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const [error, setError] = useState('');
+    const [loginUserEmail, setLoginUserEmail] = useState('');
+    const [token] = useToken(loginUserEmail);
     const [userEmail, setUserEmail] = useState('');
     const from = location.state?.from?.pathname || '/';
+
+    if (token) {
+        navigate(from, { replace: true });
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -25,7 +32,8 @@ const Login = () => {
                 if(data[0]?.email === email){
                     signIn(email, password)
                     .then((result) => {
-                        navigate(from, { replace: true });
+                        setLoginUserEmail(email);
+                        //navigate(from, { replace: true });
                         setError('');
                         form.reset();
                     })
@@ -49,7 +57,8 @@ const Login = () => {
     const handleGoogleSignIn = () => {
         googleSignIn()
             .then((result) => {
-                navigate(from, { replace: true });
+                setLoginUserEmail(result.user.email);
+                //navigate(from, { replace: true });
                 setError('');
             })
             .catch((error) => { setError(error.message) })
