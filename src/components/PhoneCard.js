@@ -34,7 +34,7 @@ const PhoneCard = ({ phone, setPhoneData }) => {
     }
 
     return (
-        <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card w-80 md:w-96 bg-base-100 shadow-xl">
             {
                 phone ?
                     <>

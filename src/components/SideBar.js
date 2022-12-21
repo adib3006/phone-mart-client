@@ -9,9 +9,9 @@ const SideBar = () => {
     const navigate = useNavigate();
     const [isActive, setActive] = useState('false');
 
-    const {data:currentUser = []} = useQuery({
-        queryKey:['users', user?.email],
-        queryFn: async ()=>{
+    const { data: currentUser = [] } = useQuery({
+        queryKey: ['users', user?.email],
+        queryFn: async () => {
             const res = await fetch(`https://phone-mart-server.vercel.app/users?email=${user?.email}`);
             const data = await res.json();
             return data[0];
@@ -55,14 +55,18 @@ const SideBar = () => {
                             <h4 className='mx-2 my-2 text-2xl font-medium text-gray-800'>
                                 {user?.displayName}
                             </h4>
-                            
-                                <img
-                                    className='object-cover w-24 h-24 mx-2 rounded-lg'
-                                    src={user?.photoURL}
-                                    alt='avatar'
-                                    referrerPolicy='no-referrer'
-                                />
-                            
+
+                            {
+                                user?.uid ?
+                                    <img
+                                        className='object-cover w-24 h-24 mx-2 rounded-lg'
+                                        src={user?.photoURL}
+                                        alt='avatar'
+                                        referrerPolicy='no-referrer'
+                                    /> :
+                                    <p className='px-3'>Please <Link to='/login' className='text-lime-600 underline'>Login</Link> to see dashboard menu</p>
+                            }
+
                             <p className='mx-2 mt-1 text-sm font-medium text-gray-600'>
                                 {user?.email}
                             </p>
@@ -72,36 +76,36 @@ const SideBar = () => {
                     {/* Nav Items */}
                     <div className='flex flex-col justify-between flex-1 mt-6'>
                         <nav>
-                            {(role === 'admin') && 
-                            <><Link to='/dashboard/all-buyers' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                All Buyers</Link>
-                            <Link to='/dashboard/all-sellers' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                All Sellers</Link>
-                            <Link to='/dashboard/reported-products' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                Reported Products</Link></>}
-                            
-                            {(role === "seller") && 
-                            <><Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                Add a Product</Link>
-                            <Link to='/dashboard/my-products' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                My Products</Link></>}
-                            
-                            {(role !== "admin" && role !== "seller") && 
-                            <Link to='/dashboard/my-orders' className='ml-6 hover:bg-slate-400 p-2 block'>
-                                My Orders</Link>}
-                            
+                            {(role === 'admin') &&
+                                <><Link to='/dashboard/all-buyers' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                    All Buyers</Link>
+                                    <Link to='/dashboard/all-sellers' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                        All Sellers</Link>
+                                    <Link to='/dashboard/reported-products' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                        Reported Products</Link></>}
+
+                            {(role === "seller") &&
+                                <><Link to='/dashboard/add-product' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                    Add a Product</Link>
+                                    <Link to='/dashboard/my-products' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                        My Products</Link></>}
+
+                            {(role !== "admin" && role !== "seller" && role === "buyer") &&
+                                <Link to='/dashboard/my-orders' className='ml-6 hover:bg-slate-400 p-2 block'>
+                                    My Orders</Link>}
+
                         </nav>
                     </div>
                 </div>
 
                 <div>
                     <hr />
-                    <button className='btn btn-ghost' onClick={()=>{
+                    {user?.uid && <button className='btn btn-ghost' onClick={() => {
                         logOut()
-                        .then(()=>navigate('/'))
+                            .then(() => navigate('/'))
                     }}>
                         <span className='mx-4 font-medium'>Logout</span>
-                    </button>
+                    </button>}
                 </div>
             </div>
         </>

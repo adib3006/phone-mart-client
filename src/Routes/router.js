@@ -53,12 +53,12 @@ export const router = createBrowserRouter([
     },
     {
         path:'/dashboard',
-        element:<PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
+        element:<DashboardLayout></DashboardLayout>,
         errorElement:<ErrorPage></ErrorPage>,
         children: [
             {
                 path:'/dashboard',
-                element:<PrivateRoute><Welcome></Welcome></PrivateRoute>
+                element:<Welcome></Welcome>
             },
             {
                 path:'/dashboard/add-product',
